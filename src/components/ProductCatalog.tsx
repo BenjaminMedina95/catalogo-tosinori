@@ -243,7 +243,7 @@ const PRODUCTS: Product[] = [
     id: 11,
     name: "Detergente Líquido BIOZ",
     category: "DETERGENTES",
-    description: "Poderoso desinfectante de amplio espectro, elimina 99.9% de gérmenes y virus. Ideal para hospitales, escuelas y oficinas. Presentación de 5 litros.",
+    description: " Detergente Líquido BIOZ es un detergente concentrado. La presencia de sus componentes biodegradables en su formulación facilita la limpieza de telas manchadas con grasa de alimentos (grasas freídas, aceites para ensalada, mantequilla,salsas y sopas, sudor y otros residuos corporales.",
     image: detergenteBioImg,
     variations: [
       { presentation: "Botella (1L)", aroma: "Floral", },
@@ -440,7 +440,7 @@ const PRODUCTS: Product[] = [
     id: 24,
     name: "Jabón Líquido BIOZ",
     category: "LIMPIEZA INSTITUCIONAL",
-    description: "Jabón líquido BIOZ, ideal para desinfectar superficies y objetos de uso frecuente en instituciones. Elimina el 99.9% de gérmenes y bacterias.",
+    description: "Sus componentes antibacteriales limpian y desinfectan tu piel, y gracias a su nueva formula con Glicerina tu piel estará más protegida, suave y tersa.",
     image: jabonLiquidioBiozImg,
     variations: [
       { presentation: "Galón", aroma: "Kiwi", },
