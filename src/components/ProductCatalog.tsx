@@ -711,26 +711,28 @@ const ProductCatalog: React.FC = () => {
 
       {/* Grid de Productos */}
 
-
       <div className="container mx-auto px-4 pb-12">
-        <div className="flex">
-          <SidebarCatalog
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedBrand={selectedBrand}
-            setSelectedBrand={setSelectedBrand}
-            categories={CATEGORIES}
-            brands={MARCAS}
-            premiumProducts={PREMIUM_PRODUCTS.map(p => ({
-              id: p.id,
-              name: p.name,
-              image: p.image,
-            }))}
-            onSelectPremium={handleSelectPremium}
-          />
-          <main className="flex-1 pl-0 sm:pl-8">
+        <div className="flex flex-col sm:flex-row">
+          {/* Barra lateral solo visible en sm+ */}
+          <div className="hidden sm:block">
+            <SidebarCatalog
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+              categories={CATEGORIES}
+              brands={MARCAS}
+              premiumProducts={PREMIUM_PRODUCTS.map(p => ({
+                id: p.id,
+                name: p.name,
+                image: p.image,
+              }))}
+              onSelectPremium={handleSelectPremium}
+            />
+          </div>
+          <main className="flex-1 sm:pl-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <Card
@@ -757,7 +759,7 @@ const ProductCatalog: React.FC = () => {
                     </p>
                   </div>
                 </Card>
-              ))}
+        ))}
             </div>
             {filteredProducts.length === 0 && (
               <div className="text-center py-12">
@@ -769,10 +771,13 @@ const ProductCatalog: React.FC = () => {
                   No hay productos disponibles en esta categoría.
                 </p>
               </div>
-            )}
+      )}
           </main>
         </div>
       </div>
+
+
+      
 
 
 
