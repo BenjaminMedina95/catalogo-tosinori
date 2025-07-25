@@ -593,6 +593,19 @@ const ProductCatalog: React.FC = () => {
     if (prod) openProductModal(prod);
   };
 
+
+  // Efecto para manejar el scroll del body al abrir/cerrar el sidebar
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // Limpieza por si el componente se desmonta con el drawer abierto
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarOpen]);
   // Filtrar productos cuando cambia la categoría o la búsqueda
   useEffect(() => {
     let filtered = PRODUCTS;
@@ -611,6 +624,8 @@ const ProductCatalog: React.FC = () => {
 
     setFilteredProducts(filtered);
   }, [selectedCategory, searchQuery]);
+
+
 
   // Función para abrir modal con detalles del producto
   const openProductModal = (product: Product) => {
@@ -732,7 +747,7 @@ const ProductCatalog: React.FC = () => {
             onClick={() => setSidebarOpen(false)}
           />
           {/* Sidebar */}
-          <div className="relative bg-white w-72 max-w-full h-full shadow-lg z-50">
+          <div className="relative bg-white w-72 max-w-full h-full shadow-lg z-50 overflow-y-auto">
             <div className="flex justify-between items-center p-4 border-b">
               <span className="font-semibold">Filtros</span>
               <Button
@@ -744,24 +759,22 @@ const ProductCatalog: React.FC = () => {
                 <X className="w-6 h-6" />
               </Button>
             </div>
-           
-              <SidebarCatalog
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-                selectedBrand={selectedBrand}
-                setSelectedBrand={setSelectedBrand}
-                categories={CATEGORIES}
-                brands={MARCAS}
-                premiumProducts={PREMIUM_PRODUCTS.map(p => ({
-                  id: p.id,
-                  name: p.name,
-                  image: p.image,
-                }))}
-                onSelectPremium={handleSelectPremium}
-              />
-            
+            <SidebarCatalog
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+              categories={CATEGORIES}
+              brands={MARCAS}
+              premiumProducts={PREMIUM_PRODUCTS.map(p => ({
+                id: p.id,
+                name: p.name,
+                image: p.image,
+              }))}
+              onSelectPremium={handleSelectPremium}
+            />
           </div>
         </div>
       )}
