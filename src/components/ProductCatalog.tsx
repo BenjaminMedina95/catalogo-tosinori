@@ -583,6 +583,7 @@ const ProductCatalog: React.FC = () => {
   const MARCAS = ['Yasuní', 'Mr. Clean', 'Reluciente', 'BIOZ', 'Eterna', 'Wave'];
   const PREMIUM_IDS = [25, 12];
   const PREMIUM_PRODUCTS = PRODUCTS.filter(p => PREMIUM_IDS.includes(p.id));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
 
   const [selectedBrand, setSelectedBrand] = useState<string>('');
@@ -709,6 +710,62 @@ const ProductCatalog: React.FC = () => {
         </div>
       </div>
 
+      {/* Botón hamburguesa solo en móvil */}
+      <div className="sm:hidden flex justify-start mb-4">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Mostrar filtros"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </Button>
+      </div>
+
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Fondo oscuro */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-40"
+            onClick={() => setSidebarOpen(false)}
+          />
+          {/* Sidebar */}
+          <div className="relative bg-white w-72 max-w-full h-full shadow-lg z-50">
+            <div className="flex justify-between items-center p-4 border-b">
+              <span className="font-semibold">Filtros</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Cerrar filtros"
+              >
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+           
+              <SidebarCatalog
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                selectedBrand={selectedBrand}
+                setSelectedBrand={setSelectedBrand}
+                categories={CATEGORIES}
+                brands={MARCAS}
+                premiumProducts={PREMIUM_PRODUCTS.map(p => ({
+                  id: p.id,
+                  name: p.name,
+                  image: p.image,
+                }))}
+                onSelectPremium={handleSelectPremium}
+              />
+            
+          </div>
+        </div>
+      )}
+
       {/* Grid de Productos */}
 
       <div className="container mx-auto px-4 pb-12">
@@ -759,7 +816,7 @@ const ProductCatalog: React.FC = () => {
                     </p>
                   </div>
                 </Card>
-        ))}
+              ))}
             </div>
             {filteredProducts.length === 0 && (
               <div className="text-center py-12">
@@ -771,13 +828,13 @@ const ProductCatalog: React.FC = () => {
                   No hay productos disponibles en esta categoría.
                 </p>
               </div>
-      )}
+            )}
           </main>
         </div>
       </div>
 
 
-      
+
 
 
 
