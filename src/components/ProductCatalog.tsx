@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
+import SidebarCatalog from './SidebarCatalog';
 
 
 
@@ -257,7 +258,7 @@ const PRODUCTS: Product[] = [
     id: 12,
     name: "Detergente Líquido ",
     category: "DETERGENTES",
-    description: "Extra concentrado, con poder desengrasante, experto en eliminar manchas difíciles, con abrillantador óptico que mejora la apariencia y color de los tejidos.",
+    description: " Detergente Líquido Reluciente es un detergente concentrado 100% biodegradable. La presencia de sus componentes biodegradables en su formulación facilita la limpieza de telas manchadas con grasa de alimentos (grasas freídas, aceites para ensalada, mantequilla, salsas y sopas), sudor y residuos de cosméticos.",
     image: detergenteliquidoImg,
     variations: [
       { presentation: "Botella (1L)", aroma: "Aroma Soft", },
@@ -458,7 +459,7 @@ const PRODUCTS: Product[] = [
     id: 25,
     name: "Kingras Desengrasante",
     category: "LIMPIEZA INSTITUCIONAL",
-    description: "Desengrasante concentrado biodegradable. Ideal para la industria alimentaria. Remueve la grasa de cualquier superficie, no tóxico ni corrosivo. Producto versátil y efectivo, de alta dilución según la necesidad. De pH neutro.",
+    description: "Sus propiedades de limpiador desengrasante, el producto puede utilizarse en industrias alimenticias para el aseo de pisos, maquinarias, equipos,utensilios, lavado de mesas, vajillas y cristalería de restaurantes. KINGRAS 100 ontiene agentes ablandadores que permiten su uso en aguas duras, resultando en un perfecto limpiador para las cubiertas de embarcaciones, buques, camarotes y utensilios diversos. ",
     image: kingrassImg,
     variations: [
       { presentation: "Botella (Litro)" },
@@ -579,6 +580,17 @@ const ProductCatalog: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedPresentation, setSelectedPresentation] = useState<string>('');
   const [selectedAroma, setSelectedAroma] = useState<string>('');
+  const MARCAS = ['Yasuní', 'Mr. Clean', 'Reluciente', 'BIOZ', 'Eterna', 'Wave'];
+  const PREMIUM_IDS = [25, 12];
+  const PREMIUM_PRODUCTS = PRODUCTS.filter(p => PREMIUM_IDS.includes(p.id));
+
+
+  const [selectedBrand, setSelectedBrand] = useState<string>('');
+
+  const handleSelectPremium = (id: number) => {
+    const prod = PRODUCTS.find(p => p.id === id);
+    if (prod) openProductModal(prod);
+  };
 
   // Filtrar productos cuando cambia la categoría o la búsqueda
   useEffect(() => {
@@ -698,48 +710,72 @@ const ProductCatalog: React.FC = () => {
       </div>
 
       {/* Grid de Productos */}
+
+
       <div className="container mx-auto px-4 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <Card
-              key={product.id}
-              className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
-              onClick={() => openProductModal(product)}
-            >
-              <div className="aspect-square overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-4">
-                <Badge variant="outline" className="mb-2 text-xs">
-                  {product.category}
-                </Badge>
-                <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
-                  {product.name}
+        <div className="flex">
+          <SidebarCatalog
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            selectedBrand={selectedBrand}
+            setSelectedBrand={setSelectedBrand}
+            categories={CATEGORIES}
+            brands={MARCAS}
+            premiumProducts={PREMIUM_PRODUCTS.map(p => ({
+              id: p.id,
+              name: p.name,
+              image: p.image,
+            }))}
+            onSelectPremium={handleSelectPremium}
+          />
+          <main className="flex-1 pl-0 sm:pl-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <Card
+                  key={product.id}
+                  className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
+                  onClick={() => openProductModal(product)}
+                >
+                  <div className="aspect-square overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <Badge variant="outline" className="mb-2 text-xs">
+                      {product.category}
+                    </Badge>
+                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-3">
+                      {product.description}
+                    </p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-12">
+                <Search className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
+                  No se encontraron productos
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">
-                  {product.description}
+                <p className="text-muted-foreground">
+                  No hay productos disponibles en esta categoría.
                 </p>
               </div>
-            </Card>
-          ))}
+            )}
+          </main>
         </div>
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <Search className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">
-              No se encontraron productos
-            </h3>
-            <p className="text-muted-foreground">
-              No hay productos disponibles en esta categoría.
-            </p>
-          </div>
-        )}
       </div>
+
+
+
 
       {/* Modal de Detalles */}
       {isModalOpen && selectedProduct && (
